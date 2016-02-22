@@ -52,7 +52,7 @@ Each element of the `flows_attributes` array must be a `Hash` with the following
 Parameter | Type | Default | Required | Description
 --------- | ---- | --------| -------- | -----------
 item_id | Integer | | true | ID of the item appearing on the invoice.
-quantity | Integer | Float | 1 | false | Number of items `item_id` appearing on the invoice.
+quantity | Float | 1 | false | Number of items `item_id` appearing on the invoice.
 unit_price_attributes | Hash | | true | An array representing the price of the item.
 
 A price is a `Hash` that must contain the following elements:
