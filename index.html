@@ -144,9 +144,206 @@ curl "api_endpoint_here"
 You must replace <code>YourApiKey</code> with your personal API key.
 </aside>
 
-<h1 id="invoices">Invoices</h1>
+          <h1 id="contacts">Contacts</h1>
 
-<h2 id="generate-an-invoice">Generate an invoice</h2>
+<p>A contact represent a company or person you do business with.</p>
+
+<h2 id="create-a-contact">Create a contact</h2>
+<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/contacts/create"
+  -H "Authorization: YourApiKey"
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<p>This endpoint creates a new contact.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">PUT https://white.technology/api/v1/contacts/create</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s name.</td>
+</tr>
+<tr>
+<td>email</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s email.</td>
+</tr>
+<tr>
+<td>address</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s address.</td>
+</tr>
+<tr>
+<td>zip_code</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s zip code.</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s city.</td>
+</tr>
+<tr>
+<td>tel</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s telephone.</td>
+</tr>
+<tr>
+<td>national_number</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s unique identifier in the country. That is different from the VAT number (below). For instance in France the national number is the <a href="https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27identification_du_r%C3%A9pertoire_des_%C3%A9tablissements">Siret number</a>.</td>
+</tr>
+<tr>
+<td>vat_number</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The contact&rsquo;s <a href="https://en.wikipedia.org/wiki/VAT_identification_number">VAT number</a>.</td>
+</tr>
+<tr>
+<td>external_id</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>An ID that you can freely provide to reference the contact in your own information system.</td>
+</tr>
+<tr>
+<td>country</td>
+<td>String</td>
+<td></td>
+<td>true</td>
+<td>The contact&rsquo;s country. The value must be a <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3 code</a>.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+<code>External_id</code> is a free parameter that you can provide if you want to find the contact in your own database.
+</aside>
+
+          <h1 id="items">Items</h1>
+
+<p>An item represents a good or a service that you buy, sell or produce.</p>
+
+<h2 id="create-an-item">Create an item</h2>
+<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/items/create"
+  -H "Authorization: YourApiKey"
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<p>This endpoint creates a new item.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">PUT https://white.technology/api/v1/items/create</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The item&rsquo;s name as it will appear on a document (estimate, invoice, etc.)</td>
+</tr>
+<tr>
+<td>external_id</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>An ID that you can freely provide to reference the item in your own information system.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td></td>
+<td>true</td>
+<td>Represents how the item will be dealt with in your books. There are three possible values: good, service, study.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+<code>External_id</code> is a free parameter that you can provide if you want to find the item in your own database.
+</aside>
+
+          <h1 id="invoices">Invoices</h1>
+
+<h2 id="create-an-invoice">Create an invoice</h2>
 <pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/invoices/create"
   -H "Authorization: YourApiKey"
 </code></pre>
@@ -232,10 +429,10 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <td></td>
 </tr>
 <tr>
-<td>language_id</td>
-<td>Integer</td>
+<td>language</td>
+<td>String</td>
 <td></td>
-<td>ID of the language used to generate the invoice.</td>
+<td>The language used to generate the invoice. It must be one of the <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a>.</td>
 <td></td>
 </tr>
 <tr>
@@ -314,11 +511,11 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <td>ID of the tax to apply to the <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code>. Mandatory if both <code class="prettyprint">inclusive_tax</code> and <code class="prettyprint">exclusive_tax</code> are not provided.</td>
 </tr>
 <tr>
-<td>currency_id</td>
-<td>Integer</td>
+<td>currency</td>
+<td>String</td>
 <td></td>
 <td>false</td>
-<td>ID of the invoice currency. Not used if <code class="prettyprint">tax_id</code> is provided.</td>
+<td>The invoice currency. Not used if <code class="prettyprint">tax_id</code> is provided. It must be one of the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO-4217 codes</a>.</td>
 </tr>
 </tbody></table>
 
@@ -326,10 +523,10 @@ You must replace <code>YourApiKey</code> with your personal API key.
 You can pass both <code>inclusive_tax</code> and <code>exclusive_tax</code>.
 </aside>
 
-<h1 id="value-added-taxes-vats">Value added taxes (VATs)</h1>
+          <h1 id="value-added-taxes-vats">Value added taxes (VATs)</h1>
 
 <h2 id="list-available-vats">List available VATs</h2>
-<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/invoices/create"
+<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/vats"
   -H "Authorization: YourApiKey"
 </code></pre>
 
@@ -376,7 +573,7 @@ You can pass both <code>inclusive_tax</code> and <code>exclusive_tax</code>.
 <td>String</td>
 <td></td>
 <td>false</td>
-<td>The country for which you want to list the available VATs. Returns all the VAT rates for all countries if not present. The expected value must be one of the <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO_3166-1_alpha-3</a> values.</td>
+<td>The country for which you want to list the available VATs. Returns all the VAT rates for all countries if not present. The value must be a <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3 code</a>.</td>
 </tr>
 <tr>
 <td>date</td>
@@ -391,11 +588,22 @@ You can pass both <code>inclusive_tax</code> and <code>exclusive_tax</code>.
 It sometimes happen that a country changes the rates of its VATs. By providing the date you ensure to get the list of VATs legally accepted at the given date.
 </aside>
 
+          <h1 id="currencies">Currencies</h1>
+
+<p>All currencies in White are referenced by their <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO-4217</a> codes.
+Examples of such codes are <code class="prettyprint">EUR</code>, <code class="prettyprint">USD</code>, <code class="prettyprint">GBP</code>.</p>
+
+          <h1 id="countries">Countries</h1>
+
+<p>All countries in White are referenced by their <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a>. <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a> codes.
+Examples of such codes are <code class="prettyprint">FRA</code>, <code class="prettyprint">GBR</code>, <code class="prettyprint">ITA</code>.</p>
+
+          <h1 id="languages">Languages</h1>
+
+<p>All languages in White are referenced by their <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1</a> codes.
+Examples of such codes are <code class="prettyprint">fr</code>, <code class="prettyprint">en</code>, <code class="prettyprint">it</code>.</p>
+
           <h1 id="errors">Errors</h1>
-
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
-
-<p>The Kittn API uses the following error codes:</p>
 
 <table><thead>
 <tr>
@@ -405,47 +613,23 @@ It sometimes happen that a country changes the rates of its VATs. By providing t
 </thead><tbody>
 <tr>
 <td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
-</tr>
-<tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
-</tr>
-<tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+<td>Required parameters are missing in the request.</td>
 </tr>
 <tr>
 <td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+<td>The resource has been destroyed. You are trying to get/update a resource that has been destroyed.</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
+<td>422</td>
+<td>The resource you are trying to save is not valid. This happens when the data you pass do not make any logical sense.</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+<td>423</td>
+<td>Locked resource. Mostly happens when trying to destroy a resource that is required by another resource. See details for each type of resource for more details.</td>
 </tr>
 <tr>
 <td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+<td>Something went seriously wrong on our side. Sorry about that. We are most likely already informed that you hit a wall, but please reach out to our <a href="mailto:support@white.eu.com">support</a>.</td>
 </tr>
 </tbody></table>
 
