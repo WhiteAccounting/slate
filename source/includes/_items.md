@@ -17,15 +17,15 @@ curl https://www.white.technology/api/v1/items/create
 > The above command returns JSON structured like this:
 
 ```json
-"{
-  \"item\": {
-    \"id\": null,
-    \"name\": \"Access to White API\",
-    \"reference\": null,
-    \"internal_id\": null,
-    \"type\": \"service\"
+{
+  "item": {
+    "id": null,
+    "name": "Access to White API",
+    "reference": null,
+    "internal_id": null,
+    "type": "service"
   }
-}"
+}
 ```
 
 This endpoint creates a new item.
