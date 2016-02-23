@@ -8,7 +8,11 @@ curl https://www.white.technology/api/v1/invoices/create
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true, "flows_attributes"=[{"item_id": 57, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}]}"
+     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true,
+          "flows_attributes"=[
+            {"item_id": 129, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}
+            {"item_id": 56, "quantity": 5, "unit_price_attributes"=[{"inclusive_tax": 15.1, "tax_id": 6}]}
+          ]}"
 ```
 
 > The above command returns JSON structured like this:
