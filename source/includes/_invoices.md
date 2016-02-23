@@ -8,6 +8,7 @@ curl https://www.white.technology/api/v1/invoices/create
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
+     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true, "flows_attributes"=[{"item_id": 57, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}]}"
 ```
 
 > The above command returns JSON structured like this:
@@ -32,6 +33,8 @@ due_date | Date | | false | Date the invoice is due. Defaults to the date the re
 commercial_discount | Float | 0 | false | Commercial discount applied to the invoice's total before taxes. e.g. `210.51`.
 language | String | | false | The language used to generate the invoice. It must be one of the [ISO 639-1 codes](https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1). Defaults to the language of the country your company is settled in.
 generate_pdf | Boolean | false | false | If set to `true`, White will generate a pdf for the invoice.
+send_pdf | Boolean | false | false | If set to `true`, White will send the generated pdf.
+send_to | Array | | false | | The list of email addresses the generated pdf will be sent to. Mandatory if `send_pdf` is `true`.
 flows_attributes | Array | | true | The list of lines (see below).
 
 Each element of the `flows_attributes` array must be a `Hash` with the following elements:
