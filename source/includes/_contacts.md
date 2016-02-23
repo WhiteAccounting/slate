@@ -23,7 +23,7 @@ curl https://www.white.technology/api/v1/contacts/create
 ```json
 "{
   \"contact\": {
-    \"id\": 4359,
+    \"id\": 5789,
     \"name\": \"My Client\",
     \"email\": \"contact@myclient.com\",
     \"tel\": null,
@@ -32,7 +32,8 @@ curl https://www.white.technology/api/v1/contacts/create
     \"city\": \"Paris\",
     \"address\": \"1 Boulevard Voltaire\",
     \"zip_code\": \"75011\",
-    \"country\": \"FRA\"
+    \"country\": \"FRA\",
+    \"internal_id\": null
   }
 }"
 ```
@@ -55,7 +56,7 @@ city | String | | false | The contact's city.
 tel | String | | false | The contact's telephone.
 national_number | String | | false | The contact's unique identifier in its country. That is different from the VAT number (below). For instance in France the national number is the [Siret number](https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27identification_du_r%C3%A9pertoire_des_%C3%A9tablissements).
 vat_number | String | | false | The contact's [VAT number](https://en.wikipedia.org/wiki/VAT_identification_number).
-internatl_id | String | | false | An ID that you can freely provide to reference the contact in your own information system.
+internal_id | String | | false | An ID that you can freely provide to reference the contact in your own information system.
 country | String | | true | The contact's country. The value must be a [ISO 3166-1 alpha-3 code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3).
 
 <aside class="notice">
