@@ -21,19 +21,19 @@ curl https://www.white.technology/api/v1/contacts/create
 > The above command returns JSON structured like this:
 
 ```json
-"{
-  \"contact\": {
-    \"id\": 5789,
-    \"name\": \"My Client\",
-    \"email\": \"contact@myclient.com\",
-    \"tel\": null,
-    \"national_number\": null,
-    \"vat_number\": null,
-    \"city\": \"Paris\",
-    \"address\": \"1 Boulevard Voltaire\",
-    \"zip_code\": \"75011\",
-    \"country\": \"FRA\",
-    \"internal_id\": null
+{
+  "contact": {
+    "id": 5789,
+    "name": "My Client",
+    "email": "contact@myclient.com",
+    "tel": null,
+    "national_number": null,
+    "vat_number": null,
+    "city": "Paris",
+    "address": "1 Boulevard Voltaire",
+    "zip_code": "75011",
+    "country": "FRA",
+    "internal_id": null
   }
 }"
 ```
