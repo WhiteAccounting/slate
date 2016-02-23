@@ -54,11 +54,11 @@ You can register a new API key by going in [your application settings](https://a
 White expects the API key to be included in each API request along with the `white_name` of your organization:
 
 `
- X-Entity-Token: YourApiKey
- X-Entity-White-Name: white_name
+ X-Entity-Token: UserApiKey
+ X-Entity-White-Name: company_white_name
 `
 
 <aside class="notice">
-You must replace <code>YourApiKey</code> with your personal API key.
-You must replace <code>white_name</code> with the unique name of your organization in White.
+You must replace <code>UserApiKey</code> with your personal API key.
+You must replace <code>company_white_name</code> with the unique name of your organization in White.
 </aside>
