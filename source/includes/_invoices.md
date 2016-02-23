@@ -3,8 +3,13 @@
 ## Create an invoice
 
 ```curl
-curl "https://white.technology/api/v1/invoices/create"
-  -H "Authorization: YourApiKey"
+curl https://www.white.technology/api/v1/invoices/create
+     -X PUT
+     -H "Accept: application/json"
+     -H "X-Entity-Token: UserApiKey"
+     -H "X-Entity-White-Name: company_white_name"
+     -d "name="
+     -d "type=service"
 ```
 
 > The above command returns JSON structured like this:
