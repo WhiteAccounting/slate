@@ -164,29 +164,37 @@ You must replace <code>company_white_name</code> with the unique name of your or
 <p>A contact represent a company or person you do business with.</p>
 
 <h2 id="create-a-contact">Create a contact</h2>
-<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/contacts/create"
-  -H "Authorization: YourApiKey"
+<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/contacts/create
+     -X PUT
+     -H "Accept: application/json"
+     -H "X-Entity-Token: UserApiKey"
+     -H "X-Entity-White-Name: company_white_name"
+     -d "name=My Client"
+     -d "email=contact@myclient.com"
+     -d "address=1 Boulevard Voltaire"
+     -d "zip_code=75011"
+     -d "city=Paris"
+     -d "country=FRA"
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"contact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5789</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Client"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"contact@myclient.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"tel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"national_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"vat_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1 Boulevard Voltaire"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"zip_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75011"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"internal_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
   </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="err">"</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint creates a new contact.</p>
@@ -263,7 +271,7 @@ You must replace <code>company_white_name</code> with the unique name of your or
 <td>The contact&rsquo;s <a href="https://en.wikipedia.org/wiki/VAT_identification_number">VAT number</a>.</td>
 </tr>
 <tr>
-<td>external_id</td>
+<td>internal_id</td>
 <td>String</td>
 <td></td>
 <td>false</td>
@@ -279,7 +287,7 @@ You must replace <code>company_white_name</code> with the unique name of your or
 </tbody></table>
 
 <aside class="notice">
-<code>External_id</code> is a free parameter that you can provide if you want to find the contact in your own database.
+<code>internatl_id</code> is a free parameter that you can provide if you want to find the contact in your own database.
 </aside>
 
           <h1 id="items">Items</h1>
@@ -287,29 +295,27 @@ You must replace <code>company_white_name</code> with the unique name of your or
 <p>An item represents a good or a service that you buy, sell or produce.</p>
 
 <h2 id="create-an-item">Create an item</h2>
-<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/items/create"
-  -H "Authorization: YourApiKey"
+<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/items/create
+     -X PUT
+     -H "Accept: application/json"
+     -H "X-Entity-Token: UserApiKey"
+     -H "X-Entity-White-Name: company_white_name"
+     -d "name=Access to White API"
+     -d "type=service"
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"item"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access to White API"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"internal_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"service"</span><span class="w">
   </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint creates a new item.</p>
@@ -334,10 +340,17 @@ You must replace <code>company_white_name</code> with the unique name of your or
 <td>String</td>
 <td></td>
 <td>false</td>
-<td>The item&rsquo;s name as it will appear on a document (estimate, invoice, etc.)</td>
+<td>The item&rsquo;s name as it will appear on a document (estimate, invoice, etc.).</td>
 </tr>
 <tr>
-<td>external_id</td>
+<td>reference</td>
+<td>String</td>
+<td></td>
+<td>false</td>
+<td>The item&rsquo;s reference as it will appear on a document.</td>
+</tr>
+<tr>
+<td>internal_id</td>
 <td>String</td>
 <td></td>
 <td>false</td>
@@ -353,36 +366,23 @@ You must replace <code>company_white_name</code> with the unique name of your or
 </tbody></table>
 
 <aside class="notice">
-<code>External_id</code> is a free parameter that you can provide if you want to find the item in your own database.
+<code>internatl_id</code> is a free parameter that you can provide if you want to find the item in your own database.
 </aside>
 
           <h1 id="invoices">Invoices</h1>
 
 <h2 id="create-an-invoice">Create an invoice</h2>
-<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/invoices/create"
-  -H "Authorization: YourApiKey"
+<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/invoices/create
+     -X PUT
+     -H "Accept: application/json"
+     -H "X-Entity-Token: UserApiKey"
+     -H "X-Entity-White-Name: company_white_name"
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
+<pre class="highlight json"><code></code></pre>
 
 <p>This endpoint creates a new invoice.</p>
 
@@ -556,74 +556,74 @@ Most of the time you will use one of these combinations to create a price:
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="s2">"{
-  \"vats\": [
-    {
-      \"id\": 1,
-      \"name\": \"Taux zero\",
-      \"value_date\": \"1970-01-01\",
-      \"rate\": \"0.0\",
-      \"default\": false,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 2,
-      \"name\": \"Taux r\u00e9duit\",
-      \"value_date\": \"1982-01-01\",
-      \"rate\": \"0.055\",
-      \"default\": false,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 3,
-      \"name\": \"Taux super-r\u00e9duit\",
-      \"value_date\": \"1992-01-01\",
-      \"rate\": \"0.021\",
-      \"default\": false,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 4,
-      \"name\": \"Taux normal\",
-      \"value_date\": \"2000-01-01\",
-      \"rate\": \"0.196\",
-      \"default\": true,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 5,
-      \"name\": \"Taux interm\u00e9diaire\",
-      \"value_date\": \"2012-01-01\",
-      \"rate\": \"0.07\",
-      \"default\": false,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 6,
-      \"name\": \"Taux normal\",
-      \"value_date\": \"2014-01-01\",
-      \"rate\": \"0.2\",
-      \"default\": true,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 7,
-      \"name\": \"Taux interm\u00e9diaire\",
-      \"value_date\": \"2014-01-01\",
-      \"rate\": \"0.1\",
-      \"default\": false,
-      \"country\": \"FRA\"
-    },
-    {
-      \"id\": 8,
-      \"name\": \"Pas de TVA \/ TVA non applicable\",
-      \"value_date\": \"1900-01-01\",
-      \"rate\": null,
-      \"default\": false,
-      \"country\": \"FRA\"
-    }
-  ]
-}"</span><span class="w">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"vats"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux zero"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1970-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux reduit"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1982-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.055"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux super-reduit"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.021"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux normal"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.196"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux intermediaire"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.07"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux normal"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux intermediaire"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pas de TVA / TVA non applicable"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1900-01-01"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint lists all the available value added taxes (VAT).</p>
