@@ -118,30 +118,45 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the White API! You can use our API to access White API endpoints.</p>
+<p>Welcome to the White API! You will find here everything there is to know about the endpoints
+we give you access to and how to use them.</p>
+
+<p>Have fun.</p>
 
 <h1 id="authentication">Authentication</h1>
 
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>Example of request with the right set of headers:</p>
 </blockquote>
-<pre class="highlight plaintext"><code># With curl, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: YourApiKey"
+<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/invoices/create
+     -X POST
+     -H "Accept: application/json"
+     -H "X-Entity-Token: evdsa9b5pi8uww8n38cmpowzi6orxs7b0jrdywuy"
+     -H "X-Entity-White-Name: white"
 </code></pre>
 
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">YourAuthCode</code> with your API key.</p>
-</blockquote>
+<p>White uses API keys to allow access to the API. Each user has an API key. This allows you to keep operations/resources
+linked to the users they concern.</p>
 
-<p>White uses API keys to allow access to the API. You can register a new API key by going in <a href="https://app.white.eu.com/application/settings/api">your application settings</a>.</p>
+<p>For instance, if you plan on booking sales invoices, passing the right API key for the user that made the sale will
+allow you to have a breakdown of your sales by user.</p>
 
-<p>White expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+<p>If you only need one global access, you are free to use the same API key everywhere.
+Since you can create as many users as you want, we recommend creating a user dedicated to the API to differentiate
+the operations made through the API from the ones made through the web application.</p>
 
-<p><code class="prettyprint">Authorization: YourApiKey</code></p>
+<p>You can register a new API key by going in <a href="https://app.white.eu.com/application/settings/api">your application settings</a>.</p>
+
+<p>White expects the API key to be included in each API request along with the <code class="prettyprint">white_name</code> of your organization:</p>
+
+<p><code class="prettyprint">
+ X-Entity-Token: UserApiKey
+ X-Entity-White-Name: company_white_name
+</code></p>
 
 <aside class="notice">
-You must replace <code>YourApiKey</code> with your personal API key.
+You must replace <code>UserApiKey</code> with your personal API key.
+You must replace <code>company_white_name</code> with the unique name of your organization in White.
 </aside>
 
           <h1 id="contacts">Contacts</h1>
@@ -238,7 +253,7 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <td>String</td>
 <td></td>
 <td>false</td>
-<td>The contact&rsquo;s unique identifier in the country. That is different from the VAT number (below). For instance in France the national number is the <a href="https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27identification_du_r%C3%A9pertoire_des_%C3%A9tablissements">Siret number</a>.</td>
+<td>The contact&rsquo;s unique identifier in its country. That is different from the VAT number (below). For instance in France the national number is the <a href="https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27identification_du_r%C3%A9pertoire_des_%C3%A9tablissements">Siret number</a>.</td>
 </tr>
 <tr>
 <td>vat_number</td>
@@ -396,51 +411,51 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <tr>
 <td>value_date</td>
 <td>Date</td>
+<td></td>
 <td>false</td>
 <td>Date the invoice is created. Defaults to the date the request is made.</td>
-<td></td>
 </tr>
 <tr>
 <td>number</td>
 <td>String</td>
+<td></td>
 <td>false</td>
 <td>Mandatory if auto number generation is disabled.</td>
-<td></td>
 </tr>
 <tr>
 <td>due_date</td>
 <td>Date</td>
+<td></td>
 <td>false</td>
 <td>Date the invoice is due. Defaults to the date the request is made.</td>
-<td></td>
 </tr>
 <tr>
 <td>commercial_discount</td>
 <td>Float</td>
+<td>0</td>
 <td>false</td>
-<td>Commercial discount applied to the invoice&rsquo;s total before taxes. e.g. 210.51.</td>
-<td></td>
-</tr>
-<tr>
-<td>flows_attributes</td>
-<td>Array</td>
-<td></td>
-<td>The list of lines.</td>
-<td></td>
+<td>Commercial discount applied to the invoice&rsquo;s total before taxes. e.g. <code class="prettyprint">210.51</code>.</td>
 </tr>
 <tr>
 <td>language</td>
 <td>String</td>
 <td></td>
-<td>The language used to generate the invoice. It must be one of the <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a>.</td>
-<td></td>
+<td>false</td>
+<td>The language used to generate the invoice. It must be one of the <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a>. Defaults to the language of the country your company is settled in.</td>
 </tr>
 <tr>
 <td>generate_pdf</td>
 <td>Boolean</td>
 <td>false</td>
-<td>If set to <code class="prettyprint">true</code> White will generate a pdf for the invoice.</td>
+<td>false</td>
+<td>If set to <code class="prettyprint">true</code>, White will generate a pdf for the invoice.</td>
+</tr>
+<tr>
+<td>flows_attributes</td>
+<td>Array</td>
 <td></td>
+<td>true</td>
+<td>The list of lines (see below).</td>
 </tr>
 </tbody></table>
 
@@ -460,7 +475,7 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <td>Integer</td>
 <td></td>
 <td>true</td>
-<td>ID of the item appearing on the invoice.</td>
+<td>ID of the item you are selling.</td>
 </tr>
 <tr>
 <td>quantity</td>
@@ -471,14 +486,14 @@ You must replace <code>YourApiKey</code> with your personal API key.
 </tr>
 <tr>
 <td>unit_price_attributes</td>
-<td>Hash</td>
+<td>Array</td>
 <td></td>
 <td>true</td>
 <td>An array representing the price of the item.</td>
 </tr>
 </tbody></table>
 
-<p>A price is a <code class="prettyprint">Hash</code> that must contain the following elements:</p>
+<p><code class="prettyprint">unit_price_attributes</code> is an array of <strong>one</strong> hash that contains the following elements:</p>
 
 <table><thead>
 <tr>
@@ -508,7 +523,7 @@ You must replace <code>YourApiKey</code> with your personal API key.
 <td>Integer</td>
 <td></td>
 <td>false</td>
-<td>ID of the tax to apply to the <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code>. Mandatory if both <code class="prettyprint">inclusive_tax</code> and <code class="prettyprint">exclusive_tax</code> are not provided.</td>
+<td>ID of the tax to apply to the <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code>. Mandatory if only <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code> is provided.</td>
 </tr>
 <tr>
 <td>currency</td>
@@ -520,35 +535,95 @@ You must replace <code>YourApiKey</code> with your personal API key.
 </tbody></table>
 
 <aside class="notice">
-You can pass both <code>inclusive_tax</code> and <code>exclusive_tax</code>.
+Most of the time you will use one of these combinations to create a price:
+ <ul>
+ <li><code>exclusive_tax</code>, <code>tax_id</code> (<code>currency</code> is optional).</li>
+ <li><code>inclusive_tax</code>, <code>tax_id</code> (<code>currency</code> is optional).</li>
+ <li><code>inclusive_tax</code>, <code>exclusive_tax</code> and <code>currency</code>. </li>
+ </ul>
 </aside>
 
           <h1 id="value-added-taxes-vats">Value added taxes (VATs)</h1>
 
 <h2 id="list-available-vats">List available VATs</h2>
-<pre class="highlight plaintext"><code>curl "https://white.technology/api/v1/vats"
-  -H "Authorization: YourApiKey"
+<pre class="highlight plaintext"><code>curl -G https://www.white.technology/api/v1/vats
+     -H "Accept: application/json"
+     -H "X-Entity-Token: UserApiKey"
+     -H "X-Entity-White-Name: company_white_name"
+     -d "country=FRA"
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+<pre class="highlight json"><code><span class="s2">"{
+  \"vats\": [
+    {
+      \"id\": 1,
+      \"name\": \"Taux zero\",
+      \"value_date\": \"1970-01-01\",
+      \"rate\": \"0.0\",
+      \"default\": false,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 2,
+      \"name\": \"Taux r\u00e9duit\",
+      \"value_date\": \"1982-01-01\",
+      \"rate\": \"0.055\",
+      \"default\": false,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 3,
+      \"name\": \"Taux super-r\u00e9duit\",
+      \"value_date\": \"1992-01-01\",
+      \"rate\": \"0.021\",
+      \"default\": false,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 4,
+      \"name\": \"Taux normal\",
+      \"value_date\": \"2000-01-01\",
+      \"rate\": \"0.196\",
+      \"default\": true,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 5,
+      \"name\": \"Taux interm\u00e9diaire\",
+      \"value_date\": \"2012-01-01\",
+      \"rate\": \"0.07\",
+      \"default\": false,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 6,
+      \"name\": \"Taux normal\",
+      \"value_date\": \"2014-01-01\",
+      \"rate\": \"0.2\",
+      \"default\": true,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 7,
+      \"name\": \"Taux interm\u00e9diaire\",
+      \"value_date\": \"2014-01-01\",
+      \"rate\": \"0.1\",
+      \"default\": false,
+      \"country\": \"FRA\"
+    },
+    {
+      \"id\": 8,
+      \"name\": \"Pas de TVA \/ TVA non applicable\",
+      \"value_date\": \"1900-01-01\",
+      \"rate\": null,
+      \"default\": false,
+      \"country\": \"FRA\"
+    }
+  ]
+}"</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint lists all the available value added taxes (VAT).</p>
@@ -580,7 +655,7 @@ You can pass both <code>inclusive_tax</code> and <code>exclusive_tax</code>.
 <td>Date</td>
 <td></td>
 <td>false</td>
-<td>The date at which you want to list the VATs. Defaults to the date the request was made. Returns all the VAT rates whatever their date if not present.</td>
+<td>The date at which you want to list the VATs. Defaults to the date the request is made. Returns all the VAT rates whatever their date if not present.</td>
 </tr>
 </tbody></table>
 
@@ -616,6 +691,10 @@ Examples of such codes are <code class="prettyprint">fr</code>, <code class="pre
 <td>Required parameters are missing in the request.</td>
 </tr>
 <tr>
+<td>404</td>
+<td>You most likely tried to hit a non existing endpoint.</td>
+</tr>
+<tr>
 <td>410</td>
 <td>The resource has been destroyed. You are trying to get/update a resource that has been destroyed.</td>
 </tr>
@@ -629,7 +708,7 @@ Examples of such codes are <code class="prettyprint">fr</code>, <code class="pre
 </tr>
 <tr>
 <td>500</td>
-<td>Something went seriously wrong on our side. Sorry about that. We are most likely already informed that you hit a wall, but please reach out to our <a href="mailto:support@white.eu.com">support</a>.</td>
+<td>Something went seriously wrong on our side. Sorry about that. We are most likely already informed that you hit a wall, but please reach out to our <a href="mailto:support@white.eu.com">support</a> for more information.</td>
 </tr>
 </tbody></table>
 
