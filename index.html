@@ -169,12 +169,7 @@ You must replace <code>company_white_name</code> with the unique name of your or
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "name=My Client"
-     -d "email=contact@myclient.com"
-     -d "address=1 Boulevard Voltaire"
-     -d "zip_code=75011"
-     -d "city=Paris"
-     -d "country=FRA"
+     -d "{"name":"My Client", "email":"contact@myclient.com", "address":"1 Boulevard Voltaire", "zip_code":"75011", "city":"Paris", "country"="FRA"}"
 </code></pre>
 
 <blockquote>
@@ -300,8 +295,7 @@ You must replace <code>company_white_name</code> with the unique name of your or
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "name=Access to White API"
-     -d "type=service"
+     -d "{"name":"Access to White API", "type":"service"}"
 </code></pre>
 
 <blockquote>
@@ -377,7 +371,11 @@ You must replace <code>company_white_name</code> with the unique name of your or
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true, "flows_attributes"=[{"item_id": 57, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}]}"
+     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true,
+          "flows_attributes"=[
+            {"item_id": 129, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}
+            {"item_id": 56, "quantity": 5, "unit_price_attributes"=[{"inclusive_tax": 15.1, "tax_id": 6}]}
+          ]}"
 </code></pre>
 
 <blockquote>
