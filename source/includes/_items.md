@@ -10,8 +10,7 @@ curl https://www.white.technology/api/v1/items/create
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "name=Access to White API"
-     -d "type=service"
+     -d "{"name":"Access to White API", "type":"service"}"
 ```
 
 > The above command returns JSON structured like this:

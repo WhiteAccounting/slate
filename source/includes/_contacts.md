@@ -10,12 +10,7 @@ curl https://www.white.technology/api/v1/contacts/create
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
-     -d "name=My Client"
-     -d "email=contact@myclient.com"
-     -d "address=1 Boulevard Voltaire"
-     -d "zip_code=75011"
-     -d "city=Paris"
-     -d "country=FRA"
+     -d "{"name":"My Client", "email":"contact@myclient.com", "address":"1 Boulevard Voltaire", "zip_code":"75011", "city":"Paris", "country"="FRA"}"
 ```
 
 > The above command returns JSON structured like this:
