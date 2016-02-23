@@ -3,6 +3,7 @@
 Error Code | Meaning
 ---------- | -------
 400 | Required parameters are missing in the request.
+404 | You most likely tried to hit a non existing endpoint.
 410 | The resource has been destroyed. You are trying to get/update a resource that has been destroyed.
 422 | The resource you are trying to save is not valid. This happens when the data you pass do not make any logical sense.
 423 | Locked resource. Mostly happens when trying to destroy a resource that is required by another resource. See details for each type of resource for more details.
