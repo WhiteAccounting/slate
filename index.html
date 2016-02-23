@@ -377,6 +377,7 @@ You must replace <code>company_white_name</code> with the unique name of your or
      -H "Accept: application/json"
      -H "X-Entity-Token: UserApiKey"
      -H "X-Entity-White-Name: company_white_name"
+     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true, "flows_attributes"=[{"item_id": 57, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}]}"
 </code></pre>
 
 <blockquote>
@@ -449,6 +450,20 @@ You must replace <code>company_white_name</code> with the unique name of your or
 <td>false</td>
 <td>false</td>
 <td>If set to <code class="prettyprint">true</code>, White will generate a pdf for the invoice.</td>
+</tr>
+<tr>
+<td>send_pdf</td>
+<td>Boolean</td>
+<td>false</td>
+<td>false</td>
+<td>If set to <code class="prettyprint">true</code>, White will send the generated pdf.</td>
+</tr>
+<tr>
+<td>send_to</td>
+<td>Array</td>
+<td></td>
+<td>false</td>
+<td></td>
 </tr>
 <tr>
 <td>flows_attributes</td>
