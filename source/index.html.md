@@ -15,6 +15,7 @@ includes:
   - currencies
   - countries
   - languages
+  - white_scans
   - errors
 
 search: true
