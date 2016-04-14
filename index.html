@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;curl&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -101,7 +101,8 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="curl">curl</a>
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="ruby">ruby</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -110,93 +111,137 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='https://www.white.eu.com'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://www.white.technology'>Sign Up for a developer key</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        <!---
+  - contacts
+  - items
+  - invoices
+  - vats
+  - currencies
+  - countries
+  - languages
+  - white_scans
+  - errors
+--->
 
-<p>Welcome to the White API! You will find here everything there is to know about the endpoints
-we give you access to and how to use them.</p>
+<h1 id="introduction">Introduction</h1>
+
+<p>Welcome to the <strong>White</strong> API documentation! You will find here everything there is to know about our API. Don&rsquo;t hesitate to <a href="mailto:support@white.eu.com">get in touch</a> if that is not enough.</p>
 
 <p>Have fun.</p>
 
-<h1 id="authentication">Authentication</h1>
+<h1 id="authorization">Authorization</h1>
 
 <blockquote>
-<p>Example of request with the right set of headers:</p>
+<p>Example of authorization process</p>
 </blockquote>
-<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/invoices/create
-     -X POST
-     -H "Accept: application/json"
-     -H "X-Entity-Token: evdsa9b5pi8uww8n38cmpowzi6orxs7b0jrdywuy"
-     -H "X-Entity-White-Name: white"
+<pre class="highlight shell"><code><span class="c">#!/usr/bin/env bash</span>
+curl -v -P <span class="se">\</span>
+     -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+     -d <span class="s2">"client_id=c25c41e9c0440e1dea760d071b09b1733cb67c3728d695dee0c2021750950a90"</span> <span class="se">\</span>
+     -d <span class="s2">"client_secret=6df241f66e644fd49ffca0479b32249b5df847e78a41ff1cc5a73c5d8cdea7a3"</span> <span class="se">\</span>
+     -d <span class="s2">"redirect_uri=https://localhost"</span> <span class="se">\</span>
+     -d <span class="s2">"response_type=code"</span> <span class="se">\</span>
+     --cacert /etc/ssl/certs/ca-certificates.crt <span class="se">\</span>
+     https://kpmg.white.technology/api/oauth/authorize
+</code></pre>
+<pre class="highlight ruby"><code><span class="n">gem</span> <span class="n">install</span> <span class="s1">'faraday'</span> <span class="c1"># Without bundler</span>
+<span class="n">gem</span> <span class="s1">'faraday'</span> <span class="c1"># With bundler (Gemfile)</span>
+
+<span class="nb">require</span> <span class="s1">'faraday'</span>
+
+<span class="n">faraday</span> <span class="o">=</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s1">'http://kpmg.white.technology'</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">faraday</span><span class="o">|</span>
+            <span class="n">faraday</span><span class="p">.</span><span class="nf">request</span> <span class="ss">:url_encoded</span>
+            <span class="n">faraday</span><span class="p">.</span><span class="nf">adapter</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">default_adapter</span>
+          <span class="k">end</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">faraday</span><span class="p">.</span><span class="nf">post</span> <span class="s1">'api/oauth/authorize.json'</span><span class="p">,</span>
+                      <span class="p">{</span>
+                          <span class="ss">:client_id</span> <span class="o">=&gt;</span> <span class="no">CLIENT_ID</span><span class="p">,</span>          <span class="c1"># Ask us for yours</span>
+                          <span class="ss">:client_secret</span> <span class="o">=&gt;</span> <span class="no">CLIENT_SECRET</span><span class="p">,</span>  <span class="c1"># Ask us for yours</span>
+                          <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="no">REDIRECT_URI</span><span class="p">,</span>    <span class="c1"># Must be https/ssl!</span>
+                          <span class="ss">:response_type</span> <span class="o">=&gt;</span> <span class="s1">'code'</span>
+                      <span class="p">}</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nf">body</span><span class="p">)[</span><span class="s1">'code'</span><span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="vi">@conn</span><span class="p">.</span><span class="nf">post</span> <span class="s1">'api/oauth/token.json'</span><span class="p">,</span>
+                      <span class="p">{</span>
+                          <span class="ss">:client_id</span> <span class="o">=&gt;</span> <span class="no">CLIENT_ID</span><span class="p">,</span>          <span class="c1"># Same as above</span>
+                          <span class="ss">:client_secret</span> <span class="o">=&gt;</span> <span class="no">CLIENT_SECRET</span><span class="p">,</span>  <span class="c1"># Same as above</span>
+                          <span class="ss">:redirect_uri</span>  <span class="o">=&gt;</span> <span class="no">REDIRECT_URI</span><span class="p">,</span>   <span class="c1"># Same as above</span>
+                          <span class="ss">:code</span> <span class="o">=&gt;</span> <span class="n">code</span><span class="p">,</span>                    <span class="c1"># Result of previous request</span>
+                          <span class="ss">:grant_type</span> <span class="o">=&gt;</span> <span class="s1">'authorization_code'</span>
+                      <span class="p">}</span>
+
+<span class="n">token</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="vi">@response</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span>
+
 </code></pre>
 
-<p>White uses API keys to allow access to the API. Each user has an API key. This allows you to keep operations/resources
-linked to the users they concern.</p>
+<p><strong>White</strong> uses an <a href="http://oauth.net/2/">OAuth2</a> authorization / authentication protocol to grant access to the API.</p>
 
-<p>For instance, if you plan on booking sales invoices, passing the right API key for the user that made the sale will
-allow you to have a breakdown of your sales by user.</p>
-
-<p>If you only need one global access, you are free to use the same API key everywhere.
-Since you can create as many users as you want, we recommend creating a user dedicated to the API to differentiate
-the operations made through the API from the ones made through the web application.</p>
-
-<p>You can register a new API key by going in <a href="https://app.white.eu.com/application/settings/api">your application settings</a>.</p>
-
-<p>White expects the API key to be included in each API request along with the <code class="prettyprint">white_name</code> of your organization:</p>
+<p>The authentication takes an <code class="prettyprint">access token</code> that must be provided in the header of every request.</p>
 
 <p><code class="prettyprint">
- X-Entity-Token: UserApiKey
- X-Entity-White-Name: company_white_name
+ &quot;Authorization: Bearer access_token&quot;
 </code></p>
 
+<p>example:</p>
+
+<p><code class="prettyprint">
+ &quot;Authorization: Bearer 14q1506268bed878972b42e9f99154f37ef9a214042542782c54e946ce845a64&quot;
+</code></p>
+
+<p>To obtain your <code class="prettyprint">access token</code>, you need to</p>
+
+<ol>
+<li>Request a new <code class="prettyprint">client_id</code> / <code class="prettyprint">client_secret</code> pair in <a href="https://app.white.technology/application/settings/api">your application settings</a>.</li>
+<li>Use this code pair to get an authorization code.</li>
+<li>Use the authorization code to get an <code class="prettyprint">access token</code>.</li>
+</ol>
+
 <aside class="notice">
-You must replace <code>UserApiKey</code> with your personal API key.
-You must replace <code>company_white_name</code> with the unique name of your organization in White.
+<ol>
+ <li>Access tokens are bound to users. If you wish to give different acces to <bold>White</bold> for different users you are welcome to do so by giving each user a different key.</li>
+ <li>Even though our <code>access tokens</code> do not expire, you can revoke them or request a new one at any moment.</li>
+<ol>
 </aside>
 
-          <h1 id="contacts">Contacts</h1>
+<p>Numerous libraries exist in every language to acquire OAuth2 access tokens. You are free to use any of them.</p>
 
-<p>A contact represent a company or person you do business with.</p>
+          <h1 id="organizations">Organizations</h1>
 
-<h2 id="create-a-contact">Create a contact</h2>
-<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/contacts/create
-     -X PUT
-     -H "Accept: application/json"
-     -H "X-Entity-Token: UserApiKey"
-     -H "X-Entity-White-Name: company_white_name"
-     -d "{"name":"My Client", "email":"contact@myclient.com", "address":"1 Boulevard Voltaire", "zip_code":"75011", "city":"Paris", "country"="FRA"}"
-</code></pre>
+<p>An organization is a company or any other legal entity (association, etc.). For most requests you&rsquo;ll have to specify in the url path what company the request is
+referring to. For instance creating an invoice is linked to an organization. Adding a document is linked to an organization, etc.</p>
+
+<p>Each organization is referred to by a unique name, called in the web application interface <code class="prettyprint">white name</code>.
+You are free to choose whatever name you wish for an organization as long as it is unique across all organizations.</p>
+
+<p>So for instance, all requests for the <code class="prettyprint">microsoft</code> organization would have the <code class="prettyprint">:organization</code> placeholder replaced by <code class="prettyprint">microsoft</code>.</p>
+
+<p><code class="prettyprint">http://kpmg.white.technology/api/v1/:organization</code></p>
+
+          <h1 id="jobs">Jobs</h1>
+
+<p>We call a <code class="prettyprint">job</code> the task of processing a document to read, qualify and book it. You can create <code class="prettyprint">jobs</code> through our API and
+retrieve their results.</p>
+
+<p>A job cannot be destroyed.</p>
+
+<h2 id="creating-a-job">Creating a job</h2>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"contact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5789</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Client"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"contact@myclient.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"tel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"national_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"vat_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1 Boulevard Voltaire"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"zip_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75011"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"internal_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="err">"</span><span class="w">
-</span></code></pre>
-
-<p>This endpoint creates a new contact.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">PUT https://white.technology/api/v1/contacts/create</code></p>
+<p><code class="prettyprint">POST http://kpmg.white.technology/api/v1/:organization/jobs</code></p>
 
 <h3 id="query-parameters">Query Parameters</h3>
 
@@ -210,440 +255,43 @@ You must replace <code>company_white_name</code> with the unique name of your or
 </tr>
 </thead><tbody>
 <tr>
-<td>name</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s name.</td>
-</tr>
-<tr>
-<td>email</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s email.</td>
-</tr>
-<tr>
-<td>address</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s address.</td>
-</tr>
-<tr>
-<td>zip_code</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s zip code.</td>
-</tr>
-<tr>
-<td>city</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s city.</td>
-</tr>
-<tr>
-<td>tel</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s telephone.</td>
-</tr>
-<tr>
-<td>national_number</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s unique identifier in its country. That is different from the VAT number (below). For instance in France the national number is the <a href="https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27identification_du_r%C3%A9pertoire_des_%C3%A9tablissements">Siret number</a>.</td>
-</tr>
-<tr>
-<td>vat_number</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The contact&rsquo;s <a href="https://en.wikipedia.org/wiki/VAT_identification_number">VAT number</a>.</td>
-</tr>
-<tr>
-<td>internal_id</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>An ID that you can freely provide to reference the contact in your own information system.</td>
-</tr>
-<tr>
-<td>country</td>
-<td>String</td>
+<td>file</td>
+<td>File</td>
 <td></td>
 <td>true</td>
-<td>The contact&rsquo;s country. The value must be a <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3 code</a>.</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">
-<code>internatl_id</code> is a free parameter that you can provide if you want to find the contact in your own database.
-</aside>
-
-          <h1 id="items">Items</h1>
-
-<p>An item represents a good or a service that you buy, sell or produce.</p>
-
-<h2 id="create-an-item">Create an item</h2>
-<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/items/create
-     -X PUT
-     -H "Accept: application/json"
-     -H "X-Entity-Token: UserApiKey"
-     -H "X-Entity-White-Name: company_white_name"
-     -d "{"name":"Access to White API", "type":"service"}"
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"item"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Access to White API"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"internal_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"service"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>This endpoint creates a new item.</p>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">PUT https://white.technology/api/v1/items/create</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>name</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The item&rsquo;s name as it will appear on a document (estimate, invoice, etc.).</td>
+<td>The file to process</td>
 </tr>
 <tr>
-<td>reference</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The item&rsquo;s reference as it will appear on a document.</td>
-</tr>
-<tr>
-<td>internal_id</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>An ID that you can freely provide to reference the item in your own information system.</td>
-</tr>
-<tr>
-<td>type</td>
-<td>String</td>
-<td></td>
-<td>true</td>
-<td>Represents how the item will be dealt with in your books. There are three possible values: good, service, study.</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">
-<code>internatl_id</code> is a free parameter that you can provide if you want to find the item in your own database.
-</aside>
-
-          <h1 id="invoices">Invoices</h1>
-
-<h2 id="create-an-invoice">Create an invoice</h2>
-<pre class="highlight plaintext"><code>curl https://www.white.technology/api/v1/invoices/create
-     -X PUT
-     -H "Accept: application/json"
-     -H "X-Entity-Token: UserApiKey"
-     -H "X-Entity-White-Name: company_white_name"
-     -d "{"contact_id": 57, "language": "fr", "generate_pdf": true,
-          "flows_attributes"=[
-            {"item_id": 129, "quantity": 1, "unit_price_attributes"=[{"inclusive_tax": 104.5, "tax_id": 6}]}
-            {"item_id": 56, "quantity": 5, "unit_price_attributes"=[{"inclusive_tax": 15.1, "tax_id": 6}]}
-          ]}"
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code></code></pre>
-
-<p>This endpoint creates a new invoice.</p>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">PUT https://white.technology/api/v1/invoices/create</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>contact_id</td>
-<td>Integer</td>
-<td></td>
-<td>ID of the contact the invoice is created to.</td>
-<td></td>
-</tr>
-<tr>
-<td>value_date</td>
-<td>Date</td>
-<td></td>
-<td>false</td>
-<td>Date the invoice is created. Defaults to the date the request is made.</td>
-</tr>
-<tr>
-<td>number</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>Mandatory if auto number generation is disabled.</td>
-</tr>
-<tr>
-<td>due_date</td>
-<td>Date</td>
-<td></td>
-<td>false</td>
-<td>Date the invoice is due. Defaults to the date the request is made.</td>
-</tr>
-<tr>
-<td>commercial_discount</td>
-<td>Float</td>
-<td>0</td>
-<td>false</td>
-<td>Commercial discount applied to the invoice&rsquo;s total before taxes. e.g. <code class="prettyprint">210.51</code>.</td>
-</tr>
-<tr>
-<td>language</td>
-<td>String</td>
-<td></td>
-<td>false</td>
-<td>The language used to generate the invoice. It must be one of the <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a>. Defaults to the language of the country your company is settled in.</td>
-</tr>
-<tr>
-<td>generate_pdf</td>
+<td>provider</td>
 <td>Boolean</td>
-<td>false</td>
-<td>false</td>
-<td>If set to <code class="prettyprint">true</code>, White will generate a pdf for the invoice.</td>
-</tr>
-<tr>
-<td>send_pdf</td>
-<td>Boolean</td>
-<td>false</td>
-<td>false</td>
-<td>If set to <code class="prettyprint">true</code>, White will send the generated pdf.</td>
-</tr>
-<tr>
-<td>send_to</td>
-<td>Array</td>
-<td></td>
-<td>false</td>
-<td></td>
-</tr>
-<tr>
-<td>flows_attributes</td>
-<td>Array</td>
 <td></td>
 <td>true</td>
-<td>The list of lines (see below).</td>
-</tr>
-</tbody></table>
-
-<p>Each element of the <code class="prettyprint">flows_attributes</code> array must be a <code class="prettyprint">Hash</code> with the following elements:</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>item_id</td>
-<td>Integer</td>
-<td></td>
-<td>true</td>
-<td>ID of the item you are selling.</td>
+<td>Set to <code class="prettyprint">true</code> if the document is from a provider. Set to <code class="prettyprint">false</code> if the document is for a client.</td>
 </tr>
 <tr>
-<td>quantity</td>
-<td>Float</td>
-<td>1</td>
-<td>false</td>
-<td>Number of items <code class="prettyprint">item_id</code> appearing on the invoice.</td>
-</tr>
-<tr>
-<td>unit_price_attributes</td>
-<td>Array</td>
-<td></td>
-<td>true</td>
-<td>An array representing the price of the item.</td>
-</tr>
-</tbody></table>
-
-<p><code class="prettyprint">unit_price_attributes</code> is an array of <strong>one</strong> hash that contains the following elements:</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>inclusive_tax</td>
-<td>Float</td>
-<td></td>
-<td>false</td>
-<td>The <code class="prettyprint">Item</code> price inclusive tax. Mandatory if <code class="prettyprint">exclusive_tax</code> is not present.</td>
-</tr>
-<tr>
-<td>exclusive_tax</td>
-<td>Float</td>
-<td></td>
-<td>false</td>
-<td>The <code class="prettyprint">Item</code> price exclusive tax. Mandatory if <code class="prettyprint">inclusive_tax</code> is not present.</td>
-</tr>
-<tr>
-<td>tax_id</td>
-<td>Integer</td>
-<td></td>
-<td>false</td>
-<td>ID of the tax to apply to the <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code>. Mandatory if only <code class="prettyprint">inclusive_tax</code> or <code class="prettyprint">exclusive_tax</code> is provided.</td>
-</tr>
-<tr>
-<td>currency</td>
+<td>id</td>
 <td>String</td>
 <td></td>
 <td>false</td>
-<td>The invoice currency. Not used if <code class="prettyprint">tax_id</code> is provided. It must be one of the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO-4217 codes</a>.</td>
+<td>A possible ID to refer to the job later on. If none is passed, an ID is generated. The ID, whether passed or not is returned in the reply.</td>
 </tr>
 </tbody></table>
 
 <aside class="notice">
-Most of the time you will use one of these combinations to create a price:
- <ul>
- <li><code>exclusive_tax</code>, <code>tax_id</code> (<code>currency</code> is optional).</li>
- <li><code>inclusive_tax</code>, <code>tax_id</code> (<code>currency</code> is optional).</li>
- <li><code>inclusive_tax</code>, <code>exclusive_tax</code> and <code>currency</code>. </li>
- </ul>
+If you provide an <code>id</code>, it must be unique to the organization or the request will be rejected.
 </aside>
 
-          <h1 id="value-added-taxes-vats">Value added taxes (VATs)</h1>
+<h2 id="retrieving-a-job">Retrieving a job</h2>
 
-<h2 id="list-available-vats">List available VATs</h2>
-<pre class="highlight plaintext"><code>curl -G https://www.white.technology/api/v1/vats
-     -H "Accept: application/json"
-     -H "X-Entity-Token: UserApiKey"
-     -H "X-Entity-White-Name: company_white_name"
-     -d "country=FRA"
-</code></pre>
+<p>You can retrieve the result of a job with its <code class="prettyprint">id</code>.</p>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"vats"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux zero"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1970-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux reduit"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1982-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.055"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux super-reduit"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.021"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux normal"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2000-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.196"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux intermediaire"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.07"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux normal"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Taux intermediaire"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.1"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pas de TVA / TVA non applicable"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1900-01-01"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"rate"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FRA"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>This endpoint lists all the available value added taxes (VAT).</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://white.technology/api/v1/vats</code></p>
+<p><code class="prettyprint">GET http://kpmg.white.technology/api/v1/:organization/jobs/:id</code></p>
 
 <h3 id="query-parameters">Query Parameters</h3>
 
@@ -657,78 +305,19 @@ Most of the time you will use one of these combinations to create a price:
 </tr>
 </thead><tbody>
 <tr>
-<td>country</td>
+<td>id</td>
 <td>String</td>
 <td></td>
-<td>false</td>
-<td>The country for which you want to list the available VATs. Returns all the VAT rates for all countries if not present. The value must be a <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3 code</a>.</td>
-</tr>
-<tr>
-<td>date</td>
-<td>Date</td>
-<td></td>
-<td>false</td>
-<td>The date at which you want to list the VATs. Defaults to the date the request is made. Returns all the VAT rates whatever their date if not present.</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">
-It sometimes happen that a country changes the rates of its VATs. By providing the date you ensure to get the list of VATs legally accepted at the given date.
-</aside>
-
-          <h1 id="currencies">Currencies</h1>
-
-<p>All currencies in White are referenced by their <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO-4217</a> codes.
-Examples of such codes are <code class="prettyprint">EUR</code>, <code class="prettyprint">USD</code>, <code class="prettyprint">GBP</code>.</p>
-
-          <h1 id="countries">Countries</h1>
-
-<p>All countries in White are referenced by their <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a>. <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1 codes</a> codes.
-Examples of such codes are <code class="prettyprint">FRA</code>, <code class="prettyprint">GBR</code>, <code class="prettyprint">ITA</code>.</p>
-
-          <h1 id="languages">Languages</h1>
-
-<p>All languages in White are referenced by their <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1">ISO 639-1</a> codes.
-Examples of such codes are <code class="prettyprint">fr</code>, <code class="prettyprint">en</code>, <code class="prettyprint">it</code>.</p>
-
-          <h1 id="errors">Errors</h1>
-
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>400</td>
-<td>Required parameters are missing in the request.</td>
-</tr>
-<tr>
-<td>404</td>
-<td>You most likely tried to hit a non existing endpoint.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>The resource has been destroyed. You are trying to get/update a resource that has been destroyed.</td>
-</tr>
-<tr>
-<td>422</td>
-<td>The resource you are trying to save is not valid. This happens when the data you pass do not make any logical sense.</td>
-</tr>
-<tr>
-<td>423</td>
-<td>Locked resource. Mostly happens when trying to destroy a resource that is required by another resource. See details for each type of resource for more details.</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Something went seriously wrong on our side. Sorry about that. We are most likely already informed that you hit a wall, but please reach out to our <a href="mailto:support@white.eu.com">support</a> for more information.</td>
+<td>true</td>
+<td>The id of the job (as returned by the server at job creation)</td>
 </tr>
 </tbody></table>
 
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="curl">curl</a>
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="ruby">ruby</a>
           </div>
       </div>
     </div>
