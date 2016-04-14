@@ -2,12 +2,20 @@
 title: API Reference
 
 language_tabs:
-  - curl
+  - shell
+  - ruby
 
 toc_footers:
-  - <a href='https://www.white.eu.com'>Sign Up for a Developer Key</a>
+  - <a href='https://www.white.technology'>Sign Up for a developer key</a>
 
 includes:
+  - organizations
+  - jobs
+
+search: true
+---
+
+<!---
   - contacts
   - items
   - invoices
@@ -17,49 +25,90 @@ includes:
   - languages
   - white_scans
   - errors
-
-search: true
----
+--->
 
 # Introduction
 
-Welcome to the White API! You will find here everything there is to know about the endpoints
-we give you access to and how to use them.
+Welcome to the **White** API documentation! You will find here everything there is to know about our API. Don't hesitate to [get in touch](mailto:support@white.eu.com) if that is not enough.
 
 Have fun.
 
-# Authentication
+# Authorization
 
-> Example of request with the right set of headers:
+> Example of authorization process
 
-```curl
-curl https://www.white.technology/api/v1/invoices/create
-     -X POST
-     -H "Accept: application/json"
-     -H "X-Entity-Token: evdsa9b5pi8uww8n38cmpowzi6orxs7b0jrdywuy"
-     -H "X-Entity-White-Name: white"
+```shell
+#!/usr/bin/env bash
+curl -v -P \
+     -H "Accept: application/json" \
+     -d "client_id=c25c41e9c0440e1dea760d071b09b1733cb67c3728d695dee0c2021750950a90" \
+     -d "client_secret=6df241f66e644fd49ffca0479b32249b5df847e78a41ff1cc5a73c5d8cdea7a3" \
+     -d "redirect_uri=https://localhost" \
+     -d "response_type=code" \
+     --cacert /etc/ssl/certs/ca-certificates.crt \
+     https://kpmg.white.technology/api/oauth/authorize
 ```
 
-White uses API keys to allow access to the API. Each user has an API key. This allows you to keep operations/resources
-linked to the users they concern.
 
-For instance, if you plan on booking sales invoices, passing the right API key for the user that made the sale will
-allow you to have a breakdown of your sales by user.
+```ruby
+gem install 'faraday' # Without bundler
+gem 'faraday' # With bundler (Gemfile)
 
-If you only need one global access, you are free to use the same API key everywhere.
-Since you can create as many users as you want, we recommend creating a user dedicated to the API to differentiate
-the operations made through the API from the ones made through the web application.
+require 'faraday'
 
-You can register a new API key by going in [your application settings](https://app.white.eu.com/application/settings/api).
+faraday = Faraday.new(:url => 'http://kpmg.white.technology') do |faraday|
+            faraday.request :url_encoded
+            faraday.adapter Faraday.default_adapter
+          end
 
-White expects the API key to be included in each API request along with the `white_name` of your organization:
+response = faraday.post 'api/oauth/authorize.json',
+                      {
+                          :client_id => CLIENT_ID,          # Ask us for yours
+                          :client_secret => CLIENT_SECRET,  # Ask us for yours
+                          :redirect_uri => REDIRECT_URI,    # Must be https/ssl!
+                          :response_type => 'code'
+                      }
+
+code = JSON.parse(response.body)['code']
+
+response = @conn.post 'api/oauth/token.json',
+                      {
+                          :client_id => CLIENT_ID,          # Same as above
+                          :client_secret => CLIENT_SECRET,  # Same as above
+                          :redirect_uri  => REDIRECT_URI,   # Same as above
+                          :code => code,                    # Result of previous request
+                          :grant_type => 'authorization_code'
+                      }
+
+token = JSON.parse(@response.body)
+
+```
+
+**White** uses an [OAuth2](http://oauth.net/2/) authorization / authentication protocol to grant access to the API.
+
+The authentication takes an `access token` that must be provided in the header of every request.
 
 `
- X-Entity-Token: UserApiKey
- X-Entity-White-Name: company_white_name
+ "Authorization: Bearer access_token"
 `
+
+example:
+
+`
+ "Authorization: Bearer 14q1506268bed878972b42e9f99154f37ef9a214042542782c54e946ce845a64"
+`
+
+To obtain your `access token`, you need to
+
+  1. Request a new `client_id` / `client_secret` pair in [your application settings](https://app.white.technology/application/settings/api).
+  2. Use this code pair to get an authorization code.
+  3. Use the authorization code to get an `access token`.
 
 <aside class="notice">
-You must replace <code>UserApiKey</code> with your personal API key.
-You must replace <code>company_white_name</code> with the unique name of your organization in White.
+<ol>
+ <li>Access tokens are bound to users. If you wish to give different acces to <bold>White</bold> for different users you are welcome to do so by giving each user a different key.</li>
+ <li>Even though our <code>access tokens</code> do not expire, you can revoke them or request a new one at any moment.</li>
+<ol>
 </aside>
+
+Numerous libraries exist in every language to acquire OAuth2 access tokens. You are free to use any of them.
