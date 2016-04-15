@@ -28,9 +28,9 @@ end
 > The above command returns JSON structured like this:
 
 ```json
-  {
-    "id": "55bb001fb9b8464ca2d23ac8449f269c"
-  }
+{
+  "id": "55bb001fb9b8464ca2d23ac8449f269c"
+}
 ```
 
 ### HTTP Request
