@@ -39,14 +39,14 @@ Have fun.
 
 ```shell
 #!/usr/bin/env bash
-curl -v -P \
-     -H "Accept: application/json" \
-     -d "client_id=c25c41e9c0440e1dea760d071b09b1733cb67c3728d695dee0c2021750950a90" \
-     -d "client_secret=6df241f66e644fd49ffca0479b32249b5df847e78a41ff1cc5a73c5d8cdea7a3" \
-     -d "redirect_uri=https://localhost" \
-     -d "response_type=code" \
-     --cacert /etc/ssl/certs/ca-certificates.crt \
-     https://kpmg.white.technology/api/oauth/authorize
+RESPONSE="$(curl -X POST \
+  -v \
+  -H "Content-Type: application/json" \
+  -d "{\"client_id\":\"c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2\", \
+       \"client_secret\":\"ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281\", \
+       \"redirect_uri\":\"https://localhost\", \
+       \"response_type\":\"code\"}" \
+  http://kpmg.white.technology/api/oauth/authorize.json)"
 ```
 
 
@@ -89,7 +89,7 @@ token = JSON.parse(@response.body)
 The authentication takes an `access token` that must be provided in the header of every request.
 
 `
- "Authorization: Bearer access_token"
+ "Authorization: Bearer ACCESS_TOKEN"
 `
 
 example:

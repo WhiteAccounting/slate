@@ -7,6 +7,24 @@ A job cannot be destroyed.
 
 ## Creating a job
 
+```ruby
+require 'faraday'
+
+@conn = Faraday.new(:url => 'http://kpmg.white.technology') do |faraday|
+  faraday.request :multipart # To send files
+  faraday.adapter :net_http  # To send files
+end
+
+@payload = { :file => Faraday::UploadIO.new('file.pdf', 'application/pdf'),
+             :provider => true  # The file is coming from one of our providers
+           }
+
+@query = @conn.post 'api/v1/:organization/jobs.json',
+                    @payload,
+                    { 'Authorization' => "Bearer ACCESS_TOKEN" }
+
+```
+
 > The above command returns JSON structured like this:
 
 ### HTTP Request
@@ -40,3 +58,29 @@ You can retrieve the result of a job with its `id`.
 Parameter | Type | Default | Required | Description
 --------- | ---- | --------| -------- | -----------
 id | String | | true | The id of the job (as returned by the server at job creation)
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id": "34d5b9b3c2fe4752b35fcbb5ebb7f6f3",
+  "tag": "etude_et_prestation_de_service",
+  "document_type": "invoice",
+  "value_date": null,
+  "currency": "EUR",
+  "name": "John Lennon",
+  "address": "78 boulevard Voltaire",
+  "zip_code": "75011",
+  "city": "Paris",
+  "email": "john.lennon@gmail.com",
+  "tel": "0101010101",
+  "vat_number": null,
+  "national_number": null,
+  "prices": [
+    {
+      "inclusive_tax": 250.0,
+      "exclusive_tax": 250.0
+    }],
+  "processed": true
+}
+```
