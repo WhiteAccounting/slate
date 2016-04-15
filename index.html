@@ -141,14 +141,14 @@
 <p>Example of authorization process</p>
 </blockquote>
 <pre class="highlight shell"><code><span class="c">#!/usr/bin/env bash</span>
-curl -v -P <span class="se">\</span>
-     -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
-     -d <span class="s2">"client_id=c25c41e9c0440e1dea760d071b09b1733cb67c3728d695dee0c2021750950a90"</span> <span class="se">\</span>
-     -d <span class="s2">"client_secret=6df241f66e644fd49ffca0479b32249b5df847e78a41ff1cc5a73c5d8cdea7a3"</span> <span class="se">\</span>
-     -d <span class="s2">"redirect_uri=https://localhost"</span> <span class="se">\</span>
-     -d <span class="s2">"response_type=code"</span> <span class="se">\</span>
-     --cacert /etc/ssl/certs/ca-certificates.crt <span class="se">\</span>
-     https://kpmg.white.technology/api/oauth/authorize
+<span class="nv">RESPONSE</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
+  -v <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -d <span class="s2">"{</span><span class="se">\"</span><span class="s2">client_id</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">client_secret</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">redirect_uri</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">https://localhost</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">response_type</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">code</span><span class="se">\"</span><span class="s2">}"</span> <span class="se">\</span>
+  http://kpmg.white.technology/api/oauth/authorize.json<span class="k">)</span><span class="s2">"</span>
 </code></pre>
 <pre class="highlight ruby"><code><span class="n">gem</span> <span class="n">install</span> <span class="s1">'faraday'</span> <span class="c1"># Without bundler</span>
 <span class="n">gem</span> <span class="s1">'faraday'</span> <span class="c1"># With bundler (Gemfile)</span>
@@ -188,7 +188,7 @@ curl -v -P <span class="se">\</span>
 <p>The authentication takes an <code class="prettyprint">access token</code> that must be provided in the header of every request.</p>
 
 <p><code class="prettyprint">
- &quot;Authorization: Bearer access_token&quot;
+ &quot;Authorization: Bearer ACCESS_TOKEN&quot;
 </code></p>
 
 <p>example:</p>
@@ -234,6 +234,22 @@ retrieve their results.</p>
 <p>A job cannot be destroyed.</p>
 
 <h2 id="creating-a-job">Creating a job</h2>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'faraday'</span>
+
+<span class="vi">@conn</span> <span class="o">=</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s1">'http://kpmg.white.technology'</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">faraday</span><span class="o">|</span>
+  <span class="n">faraday</span><span class="p">.</span><span class="nf">request</span> <span class="ss">:multipart</span> <span class="c1"># To send files</span>
+  <span class="n">faraday</span><span class="p">.</span><span class="nf">adapter</span> <span class="ss">:net_http</span>  <span class="c1"># To send files</span>
+<span class="k">end</span>
+
+<span class="vi">@payload</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="no">Faraday</span><span class="o">::</span><span class="no">UploadIO</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'file.pdf'</span><span class="p">,</span> <span class="s1">'application/pdf'</span><span class="p">),</span>
+             <span class="ss">:provider</span> <span class="o">=&gt;</span> <span class="kp">true</span>  <span class="c1"># The file is coming from one of our providers</span>
+           <span class="p">}</span>
+
+<span class="vi">@query</span> <span class="o">=</span> <span class="vi">@conn</span><span class="p">.</span><span class="nf">post</span> <span class="s1">'api/v1/:organization/jobs.json'</span><span class="p">,</span>
+                    <span class="vi">@payload</span><span class="p">,</span>
+                    <span class="p">{</span> <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s2">"Bearer ACCESS_TOKEN"</span> <span class="p">}</span>
+
+</code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -284,10 +300,36 @@ If you provide an <code>id</code>, it must be unique to the organization or the 
 <h2 id="retrieving-a-job">Retrieving a job</h2>
 
 <p>You can retrieve the result of a job with its <code class="prettyprint">id</code>.</p>
+<pre class="highlight shell"><code>  curl -H <span class="s2">"Authorization: Bearer ACCESS_TOKEN"</span> <span class="se">\</span>
+       -X GET <span class="se">\</span>
+       http://kpmg.white.technology/api/v1/:organization/jobs/:id.json
+</code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34d5b9b3c2fe4752b35fcbb5ebb7f6f3"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"etude_et_prestation_de_service"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"document_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Lennon"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78 boulevard Voltaire"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"zip_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75011"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.lennon@gmail.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"tel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0101010101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"vat_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"national_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"prices"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"inclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"exclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">238.41</span><span class="w">
+    </span><span class="p">}],</span><span class="w">
+  </span><span class="nt">"processed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 
 <h3 id="http-request">HTTP Request</h3>
 
