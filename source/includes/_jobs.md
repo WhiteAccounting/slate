@@ -57,25 +57,27 @@ You can retrieve the result of a job with its `id`.
 
 ```json
 {
-  "id": "34d5b9b3c2fe4752b35fcbb5ebb7f6f3",
-  "tag": "etude_et_prestation_de_service",
-  "document_type": "invoice",
-  "value_date": null,
-  "currency": "EUR",
-  "name": "John Lennon",
-  "address": "78 boulevard Voltaire",
-  "zip_code": "75011",
-  "city": "Paris",
-  "email": "john.lennon@gmail.com",
-  "tel": "0101010101",
-  "vat_number": null,
-  "national_number": null,
-  "prices": [
-    {
-      "inclusive_tax": 250.0,
-      "exclusive_tax": 238.41
-    }],
-  "processed": true
+  job: {
+    "id": "34d5b9b3c2fe4752b35fcbb5ebb7f6f3",
+    "tag": "etude_et_prestation_de_service",
+    "document_type": "invoice",
+    "value_date": null,
+    "currency": "EUR",
+    "name": "John Lennon",
+    "address": "78 boulevard Voltaire",
+    "zip_code": "75011",
+    "city": "Paris",
+    "email": "john.lennon@gmail.com",
+    "tel": "0101010101",
+    "vat_number": null,
+    "national_number": null,
+    "prices": [
+      {
+        "inclusive_tax": 250.0,
+        "exclusive_tax": 238.41
+      }],
+    "processed": true
+  }
 }
 ```
 

@@ -39,14 +39,28 @@ Have fun.
 
 ```shell
 #!/usr/bin/env bash
-RESPONSE="$(curl -X POST \
+
+# Get the authorization code
+  curl -X POST \
   -v \
   -H "Content-Type: application/json" \
   -d "{\"client_id\":\"c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2\", \
        \"client_secret\":\"ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281\", \
        \"redirect_uri\":\"https://localhost\", \
        \"response_type\":\"code\"}" \
-  http://kpmg.white.technology/api/oauth/authorize.json)"
+  http://kpmg.white.technology/api/oauth/authorize.json
+
+# Get the authentication code
+
+  curl -X POST \
+  -v \
+  -H "Content-Type: application/json" \
+  -d "{\"client_id\":\"c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2\", \
+       \"client_secret\":\"ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281\", \
+       \"redirect_uri\":\"https://localhost\", \
+       \"response_type\":\"code\"}" \
+  http://kpmg.white.technology/api/oauth/authorize.json
+
 ```
 
 
