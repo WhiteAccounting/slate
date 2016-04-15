@@ -47,6 +47,14 @@ If you provide an <code>id</code>, it must be unique to the organization or the 
 
 You can retrieve the result of a job with its `id`.
 
+The returned object has a `processed` boolean field stating if the job has been processed or is still queued.
+
+Processed | Status | Returned object
+--------- | ---- | --------
+false | Queued | All values of the returned object are null.
+true | Processed | The values of the object are filled.
+
+
 ```shell
   curl -H "Authorization: Bearer ACCESS_TOKEN" \
        -X GET \
@@ -57,7 +65,7 @@ You can retrieve the result of a job with its `id`.
 
 ```json
 {
-  job: {
+  "job": {
     "id": "34d5b9b3c2fe4752b35fcbb5ebb7f6f3",
     "tag": "etude_et_prestation_de_service",
     "document_type": "invoice",

@@ -41,26 +41,25 @@ Have fun.
 #!/usr/bin/env bash
 
 # Get the authorization code
-  curl -X POST \
-  -v \
+
+curl -X POST \
   -H "Content-Type: application/json" \
-  -d "{\"client_id\":\"c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2\", \
-       \"client_secret\":\"ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281\", \
-       \"redirect_uri\":\"https://localhost\", \
+  -d "{\"client_id\":\"CLIENT_ID\", \
+       \"client_secret\":\"CLIENT_SECRET\", \
+       \"redirect_uri\":\"REDIRECT_URI\", \
        \"response_type\":\"code\"}" \
   http://kpmg.white.technology/api/oauth/authorize.json
 
-# Get the authentication code
+# Get the access token
 
-  curl -X POST \
-  -v \
+curl -X POST \
   -H "Content-Type: application/json" \
-  -d "{\"client_id\":\"c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2\", \
-       \"client_secret\":\"ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281\", \
-       \"redirect_uri\":\"https://localhost\", \
-       \"response_type\":\"code\"}" \
-  http://kpmg.white.technology/api/oauth/authorize.json
-
+  -d "{\"client_id\":\"CLIENT_ID\", \
+       \"client_secret\":\"CLIENT_SECRET\", \
+       \"redirect_uri\":\"REDIRECT_URI\", \
+       \"code\":\"CODE\", \
+       \"grant_type\":\"authorization_code\"}" \
+  http://kpmg.white.technology/api/oauth/token.json
 ```
 
 
