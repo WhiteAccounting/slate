@@ -47,17 +47,11 @@ If you provide an <code>id</code>, it must be unique to the organization or the 
 
 You can retrieve the result of a job with its `id`.
 
-> The above command returns JSON structured like this:
-
-### HTTP Request
-
-`GET http://kpmg.white.technology/api/v1/:organization/jobs/:id`
-
-### Query Parameters
-
-Parameter | Type | Default | Required | Description
---------- | ---- | --------| -------- | -----------
-id | String | | true | The id of the job (as returned by the server at job creation)
+```shell
+  curl -H "Authorization: Bearer ACCESS_TOKEN" \
+       -X GET \
+       http://kpmg.white.technology/api/v1/:organization/jobs/:id.json
+```
 
 > The above command returns JSON structured like this:
 
@@ -79,8 +73,19 @@ id | String | | true | The id of the job (as returned by the server at job creat
   "prices": [
     {
       "inclusive_tax": 250.0,
-      "exclusive_tax": 250.0
+      "exclusive_tax": 238.41
     }],
   "processed": true
 }
 ```
+
+### HTTP Request
+
+`GET http://kpmg.white.technology/api/v1/:organization/jobs/:id`
+
+### Query Parameters
+
+Parameter | Type | Default | Required | Description
+--------- | ---- | --------| -------- | -----------
+id | String | | true | The id of the job (as returned by the server at job creation)
+
