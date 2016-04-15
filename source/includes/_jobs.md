@@ -27,6 +27,12 @@ end
 
 > The above command returns JSON structured like this:
 
+```json
+  {
+    "id": "55bb001fb9b8464ca2d23ac8449f269c"
+  }
+```
+
 ### HTTP Request
 
 `POST http://kpmg.white.technology/api/v1/:organization/jobs`
@@ -59,6 +65,16 @@ true | Processed | The values of the object are filled.
   curl -H "Authorization: Bearer ACCESS_TOKEN" \
        -X GET \
        http://kpmg.white.technology/api/v1/:organization/jobs/:id.json
+```
+
+```ruby
+
+  @faraday = Faraday.new(:url => 'http://kpmg.white.technology') do |faraday|
+    faraday.request :url_encoded
+    faraday.adapter Faraday.default_adapter
+  end
+
+  @response = @faraday.get 'api/v1/:organization/jobs/:id.json'
 ```
 
 > The above command returns JSON structured like this:
