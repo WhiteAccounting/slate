@@ -141,14 +141,27 @@
 <p>Example of authorization process</p>
 </blockquote>
 <pre class="highlight shell"><code><span class="c">#!/usr/bin/env bash</span>
-<span class="nv">RESPONSE</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>curl -X POST <span class="se">\</span>
-  -v <span class="se">\</span>
+
+<span class="c"># Get the authorization code</span>
+
+curl -X POST <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  -d <span class="s2">"{</span><span class="se">\"</span><span class="s2">client_id</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">c4caae45cfb70ef3fe756aed636a8be65ce5808df8318a2c7deb56a5565b81f2</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
-       </span><span class="se">\"</span><span class="s2">client_secret</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">ae12e3fd29e4dae0875a3aaf93291abcf65df5e60d1f44526e6a64f9a10a0281</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
-       </span><span class="se">\"</span><span class="s2">redirect_uri</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">https://localhost</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+  -d <span class="s2">"{</span><span class="se">\"</span><span class="s2">client_id</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CLIENT_ID</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">client_secret</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CLIENT_SECRET</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">redirect_uri</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">REDIRECT_URI</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
        </span><span class="se">\"</span><span class="s2">response_type</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">code</span><span class="se">\"</span><span class="s2">}"</span> <span class="se">\</span>
-  http://kpmg.white.technology/api/oauth/authorize.json<span class="k">)</span><span class="s2">"</span>
+  http://kpmg.white.technology/api/oauth/authorize.json
+
+<span class="c"># Get the access token</span>
+
+curl -X POST <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -d <span class="s2">"{</span><span class="se">\"</span><span class="s2">client_id</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CLIENT_ID</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">client_secret</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CLIENT_SECRET</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">redirect_uri</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">REDIRECT_URI</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">code</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CODE</span><span class="se">\"</span><span class="s2">, </span><span class="se">\</span><span class="s2">
+       </span><span class="se">\"</span><span class="s2">grant_type</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">authorization_code</span><span class="se">\"</span><span class="s2">}"</span> <span class="se">\</span>
+  http://kpmg.white.technology/api/oauth/token.json
 </code></pre>
 <pre class="highlight ruby"><code><span class="n">gem</span> <span class="n">install</span> <span class="s1">'faraday'</span> <span class="c1"># Without bundler</span>
 <span class="n">gem</span> <span class="s1">'faraday'</span> <span class="c1"># With bundler (Gemfile)</span>
@@ -254,6 +267,10 @@ retrieve their results.</p>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55bb001fb9b8464ca2d23ac8449f269c"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -300,34 +317,65 @@ If you provide an <code>id</code>, it must be unique to the organization or the 
 <h2 id="retrieving-a-job">Retrieving a job</h2>
 
 <p>You can retrieve the result of a job with its <code class="prettyprint">id</code>.</p>
+
+<p>The returned object has a <code class="prettyprint">processed</code> boolean field stating if the job has been processed or is still queued.</p>
+
+<table><thead>
+<tr>
+<th>Processed</th>
+<th>Status</th>
+<th>Returned object</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>false</td>
+<td>Queued</td>
+<td>All values of the returned object are null.</td>
+</tr>
+<tr>
+<td>true</td>
+<td>Processed</td>
+<td>The values of the object are filled.</td>
+</tr>
+</tbody></table>
 <pre class="highlight shell"><code>  curl -H <span class="s2">"Authorization: Bearer ACCESS_TOKEN"</span> <span class="se">\</span>
        -X GET <span class="se">\</span>
        http://kpmg.white.technology/api/v1/:organization/jobs/:id.json
+</code></pre>
+<pre class="highlight ruby"><code>
+  <span class="vi">@faraday</span> <span class="o">=</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s1">'http://kpmg.white.technology'</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">faraday</span><span class="o">|</span>
+    <span class="n">faraday</span><span class="p">.</span><span class="nf">request</span> <span class="ss">:url_encoded</span>
+    <span class="n">faraday</span><span class="p">.</span><span class="nf">adapter</span> <span class="no">Faraday</span><span class="p">.</span><span class="nf">default_adapter</span>
+  <span class="k">end</span>
+
+  <span class="vi">@response</span> <span class="o">=</span> <span class="vi">@faraday</span><span class="p">.</span><span class="nf">get</span> <span class="s1">'api/v1/:organization/jobs/:id.json'</span>
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34d5b9b3c2fe4752b35fcbb5ebb7f6f3"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"etude_et_prestation_de_service"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"document_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Lennon"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78 boulevard Voltaire"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"zip_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75011"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.lennon@gmail.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"tel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0101010101"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"vat_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"national_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"prices"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"inclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"exclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">238.41</span><span class="w">
-    </span><span class="p">}],</span><span class="w">
-  </span><span class="nt">"processed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="nt">"job"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34d5b9b3c2fe4752b35fcbb5ebb7f6f3"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"etude_et_prestation_de_service"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"document_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"value_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Lennon"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78 boulevard Voltaire"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"zip_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75011"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.lennon@gmail.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"tel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0101010101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"vat_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"national_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"prices"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"inclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"exclusive_tax"</span><span class="p">:</span><span class="w"> </span><span class="mf">238.41</span><span class="w">
+      </span><span class="p">}],</span><span class="w">
+    </span><span class="nt">"processed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
